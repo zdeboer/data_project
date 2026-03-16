@@ -1,0 +1,24 @@
+<h1><%= @volume.name %></h1>
+
+<% if @volume.image_url.present? %>
+  <%= image_tag @volume.image_url, width: 200 %>
+<% end %>
+
+<% if @volume.start_year.present? %>
+  <p>Started: <%= @volume.start_year %></p>
+<% end %>
+
+<p>Publisher: <%= link_to @volume.publisher.name, publisher_path(@volume.publisher) %></p>
+
+<h2>Issues</h2>
+<% if @volume.issues.any? %>
+  <ul>
+    <% @volume.issues.each do |issue| %>
+      <li><%= issue.name.present? ? issue.name : "Issue ##{issue.issue_number}" %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No issues found for this volume.</p>
+<% end %>
+
+<%= link_to "Back to Volumes", volumes_path %>

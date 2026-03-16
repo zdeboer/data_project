@@ -1,2 +1,30 @@
-<h1>Pages#about</h1>
-<p>Find me in app/views/pages/about.html.erb</p>
+<h1>About This App</h1>
+
+<h2>What is this?</h2>
+<p>
+  This application uses data pulled from the Comic Vine API to let you
+  browse publishers, comic series (volumes), individual issues, and characters
+  from across the history of comics.
+</p>
+
+<h2>Data Sources</h2>
+<h3>Comic Vine API</h3>
+<p>
+  The primary data source is the <a href="https://comicvine.gamespot.com/api/">Comic Vine API</a>,
+  a comprehensive database of comic book information. Data is pulled from four
+  endpoints — publishers, volumes, issues, and characters — and stored across
+  five related database tables.
+</p>
+
+<h3>Faker Gem</h3>
+<p>
+  User reviews attached to individual issues are generated using the Faker gem,
+  simulating reader ratings and comments with randomized names, ratings, and review text.
+</p>
+
+<h2>Data Structure</h2>
+<p>
+  Publishers produce many Volumes (comic series). Each Volume contains many Issues.
+  Characters appear across many Issues, forming a many-to-many relationship.
+  Each Issue can also have many user Reviews.
+</p>

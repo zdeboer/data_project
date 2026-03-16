@@ -1,0 +1,41 @@
+<h1><%= issue.name.present? ? @issue.name : "Issue ##{@issue.issue_number}" %></h1>
+
+<% if @issue.image_url.present? %>
+  <%= image_tag @issue.image_url, width: 200 %>
+<% end %>
+
+<% if @issue.cover_date.present? %>
+  <p>Cover Date: <%= @issue.cover_date %></p>
+<% end %>
+
+<% if @issue.description.present? %>
+  <p><%= @issue.description %></p>
+<% end %>
+
+<p>Volume: <%= link_to @issue.volume.name, volume_path(@issue.volume) %></p>
+<p>Publisher: <%= link_to @issue.volume.publisher.name, publisher_path(@issue.volume.publisher) %></p>
+
+<h2>Characters</h2>
+<% if @issue.characters.any? %>
+  <ul>
+    <% @issue.characters.each do |character| %>
+      <li><%= character.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No characters found for this issue.</p>
+<% end %>
+
+<h2>Reviews</h2>
+<% if @issue.reviews.any? %>
+  <% @issue.reviews.each do |review| %>
+    <div>
+      <p><strong><%= review.reviewer_name %></strong> — <%= review.rating %>/5</p>
+      <p><%= review.body %></p>
+    </div>
+  <% end %>
+<% else %>
+  <p>No reviews yet.</p>
+<% end %>
+
+<%= link_to "Back to Issues", issues_path %>

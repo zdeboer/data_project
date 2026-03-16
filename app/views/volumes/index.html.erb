@@ -1,0 +1,14 @@
+<h1>Volumes</h1>
+
+<% @volumes.each do |volume| %>
+  <div>
+    <% if volume.image_url.present? %>
+      <%= image_tag volume.image_url, width: 100 %>
+    <% end %>
+    <h2><%= link_to volume.name, volume_path(volume) %></h2>
+    <p>Published by: <%= link_to volume.publisher.name, publisher_path(volume.publisher) %></p>
+    <% if volume.start_year.present? %>
+      <p>Started: <%= volume.start_year %></p>
+    <% end %>
+  </div>
+<% end %>

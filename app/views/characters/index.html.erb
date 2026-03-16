@@ -1,0 +1,16 @@
+<h1>Characters</h1>
+
+<% @characters.each do |character| %>
+  <div>
+    <% if character.image_url.present? %>
+      <%= image_tag character.image_url, width: 100 %>
+    <% end %>
+    <h2><%= link_to character.name, character_path(character) %></h2>
+    <% if character.real_name.present? %>
+      <p>Real Name: <%= character.real_name %></p>
+    <% end %>
+    <% if character.publisher.present? %>
+      <p>Publisher: <%= link_to character.publisher.name, publisher_path(character.publisher) %></p>
+    <% end %>
+  </div>
+<% end %>

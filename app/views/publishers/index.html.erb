@@ -1,0 +1,11 @@
+<h1>Publishers</h1>
+
+<% @publishers.each do |publisher| %>
+  <div>
+    <% if publisher.image_url.present? %>
+      <%= image_tag publisher.image_url, width: 100 %>
+    <% end %>
+    <h2><%= link_to publisher.name, publisher_path(publisher) %></h2>
+    <p><%= publisher.deck %></p>
+  </div>
+<% end %>

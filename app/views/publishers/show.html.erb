@@ -1,0 +1,20 @@
+<h1><%= @publisher.name %></h1>
+
+<% if @publisher.image_url.present? %>
+  <%= image_tag @publisher.image_url, width: 200 %>
+<% end %>
+
+<p><%= @publisher.deck %></p>
+
+<h2>Volumes</h2>
+<% if @publisher.volumes.any? %>
+  <ul>
+    <% @publisher.volumes.each do |volume| %>
+      <li><%= volume.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No volumes found for this publisher.</p>
+<% end %>
+
+<%= link_to "Back to Publishers", publishers_path %>

@@ -1,0 +1,14 @@
+<h1>Issues</h1>
+
+<% @issues.each do |issue| %>
+  <div>
+    <% if issue.image_url.present? %>
+      <%= image_tag issue.image_url, width: 100 %>
+    <% end %>
+    <h2><%= link_to issue.name.present? ? issue.name : "Issue ##{issue.issue_number}", issue_path(issue) %></h2>
+    <p>Volume: <%= link_to issue.volume.name, volume_path(issue.volume) %></p>
+    <% if issue.cover_date.present? %>
+      <p>Cover Date: <%= issue.cover_date %></p>
+    <% end %>
+  </div>
+<% end %>
