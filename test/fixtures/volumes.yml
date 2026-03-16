@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  start_year: 1
+  image_url: MyString
+  cv_id: 1
+  publisher: one
+
+two:
+  name: MyString
+  start_year: 1
+  image_url: MyString
+  cv_id: 1
+  publisher: two

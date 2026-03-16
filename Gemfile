@@ -58,3 +58,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "solargraph"
+
+gem "dotenv-rails", require: "dotenv/load", groups: [ :development, :test ]

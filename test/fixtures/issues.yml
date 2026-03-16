@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  issue_number: MyString
+  cover_date: 2026-03-16
+  image_url: MyString
+  description: MyText
+  cv_id: 1
+  volume: one
+
+two:
+  name: MyString
+  issue_number: MyString
+  cover_date: 2026-03-16
+  image_url: MyString
+  description: MyText
+  cv_id: 1
+  volume: two
