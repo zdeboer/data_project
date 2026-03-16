@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_16_161335) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_16_162134) do
   create_table "character_issues", force: :cascade do |t|
     t.integer "character_id", null: false
     t.integer "issue_id", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_16_161335) do
     t.text "deck"
     t.string "image_url"
     t.integer "cv_id"
-    t.integer "publisher_id", null: false
+    t.integer "publisher_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["publisher_id"], name: "index_characters_on_publisher_id"
