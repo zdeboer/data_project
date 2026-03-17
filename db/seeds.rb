@@ -18,31 +18,34 @@ def comic_vine_get(resource, params = {})
   retries = 0
   begin
     response = http.request(request)
-    sleep(0.75)
+    sleep(1.5)
     data = JSON.parse(response.body)
 
     if data["status_code"] == 107
       puts "\n  Rate limited! Waiting 60 seconds..."
       sleep(60)
-      raise JSON::ParserError  # trigger the retry logic
+      raise JSON::ParserError
     end
 
     unless data["status_code"] == 1
       puts "\n  API error #{data["status_code"]}: #{data["error"]} — skipping #{resource}"
-      { "results" => [] }
+      return { "results" => [] }
     end
 
-
+    data
   rescue JSON::ParserError
     retries += 1
     if retries <= 3
-      puts "  Rate limited, waiting 10 seconds before retry #{retries}/3..."
+      puts "  Waiting 10 seconds before retry #{retries}/3..."
       sleep(10)
       retry
     else
       puts "  Failed after 3 retries, skipping #{resource}"
       { "results" => [] }
     end
+  rescue => e
+    puts "  Unexpected error: #{e.message} — skipping #{resource}"
+    { "results" => [] }
   end
 end
 

@@ -1,16 +1,41 @@
-<h1>Issues</h1>
+<h1 class="mb-4">Issues</h1>
 
-<% @issues.each do |issue| %>
-  <div>
-    <% if issue.image_url.present? %>
-      <%= image_tag issue.image_url, width: 100 %>
-    <% end %>
-    <h2><%= link_to issue.name.present? ? issue.name : "Issue ##{issue.issue_number}", issue_path(issue) %></h2>
-    <p>Volume: <%= link_to issue.volume.name, volume_path(issue.volume) %></p>
-    <% if issue.cover_date.present? %>
-      <p>Cover Date: <%= issue.cover_date %></p>
-    <% end %>
+<%= form_with url: issues_path, method: :get, class: "row g-3 mb-4" do |f| %>
+  <div class="col-auto">
+    <%= f.text_field :query, value: params[:query], placeholder: "Search issues...", class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= f.select :volume_id,
+        options_from_collection_for_select(@volumes, :id, :name, params[:volume_id]),
+        { include_blank: "All Volumes" },
+        { class: "form-select" } %>
+  </div>
+  <div class="col-auto">
+    <%= f.submit "Search", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<%= paginate @issues %>
+<div class="row row-cols-2 row-cols-md-6 g-3">
+  <% @issues.each do |issue| %>
+    <div class="col">
+      <div class="card h-100 card-hover">
+        <% if issue.image_url.present? %>
+          <%= image_tag issue.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
+        <% end %>
+        <div class="card-body">
+          <h6 class="card-title"><%= link_to issue.name.present? ? issue.name : "Issue ##{issue.issue_number}", issue_path(issue), class: "text-decoration-none" %></h6>
+          <p class="card-text text-muted small">
+            <%= link_to issue.volume.name, volume_path(issue.volume) %>
+            <% if issue.cover_date.present? %>
+              · <%= issue.cover_date.strftime("%Y") %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <%= paginate @issues %>
+</div>

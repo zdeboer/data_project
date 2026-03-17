@@ -1,13 +1,30 @@
-<h1>Publishers</h1>
+<h1 class="mb-4">Publishers</h1>
 
-<% @publishers.each do |publisher| %>
-  <div>
-    <% if publisher.image_url.present? %>
-      <%= image_tag publisher.image_url, width: 100 %>
-    <% end %>
-    <h2><%= link_to publisher.name, publisher_path(publisher) %></h2>
-    <p><%= publisher.deck %></p>
+<%= form_with url: publishers_path, method: :get, class: "row g-3 mb-4" do |f| %>
+  <div class="col-auto">
+    <%= f.text_field :query, value: params[:query], placeholder: "Search publishers...", class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= f.submit "Search", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<%= paginate @publishers %>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <% @publishers.each do |publisher| %>
+    <div class="col">
+      <div class="card h-100">
+        <% if publisher.image_url.present? %>
+          <%= image_tag publisher.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
+        <% end %>
+        <div class="card-body">
+          <h5 class="card-title"><%= link_to publisher.name, publisher_path(publisher), class: "text-decoration-none" %></h5>
+          <p class="card-text text-muted"><%= truncate(publisher.deck, length: 100) %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <%= paginate @publishers %>
+</div>

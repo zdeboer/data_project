@@ -1,16 +1,35 @@
-<h1>Volumes</h1>
+<h1 class="mb-4">Volumes</h1>
 
-<% @volumes.each do |volume| %>
-  <div>
-    <% if volume.image_url.present? %>
-      <%= image_tag volume.image_url, width: 100 %>
-    <% end %>
-    <h2><%= link_to volume.name, volume_path(volume) %></h2>
-    <p>Published by: <%= link_to volume.publisher.name, publisher_path(volume.publisher) %></p>
-    <% if volume.start_year.present? %>
-      <p>Started: <%= volume.start_year %></p>
-    <% end %>
+<%= form_with url: volumes_path, method: :get, class: "row g-3 mb-4" do |f| %>
+  <div class="col-auto">
+    <%= f.text_field :query, value: params[:query], placeholder: "Search volumes...", class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= f.submit "Search", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<%= paginate @volumes %>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <% @volumes.each do |volume| %>
+    <div class="col">
+      <div class="card h-100">
+        <% if volume.image_url.present? %>
+          <%= image_tag volume.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
+        <% end %>
+        <div class="card-body">
+          <h5 class="card-title"><%= link_to volume.name, volume_path(volume), class: "text-decoration-none" %></h5>
+          <p class="card-text text-muted">
+            <%= link_to volume.publisher.name, publisher_path(volume.publisher) %>
+            <% if volume.start_year.present? %>
+              · <%= volume.start_year %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <%= paginate @volumes %>
+</div>

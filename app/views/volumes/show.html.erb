@@ -1,24 +1,39 @@
-<h1><%= @volume.name %></h1>
-
-<% if @volume.image_url.present? %>
-  <%= image_tag @volume.image_url, width: 200 %>
-<% end %>
-
-<% if @volume.start_year.present? %>
-  <p>Started: <%= @volume.start_year %></p>
-<% end %>
-
-<p>Publisher: <%= link_to @volume.publisher.name, publisher_path(@volume.publisher) %></p>
-
-<h2>Issues</h2>
-<% if @volume.issues.any? %>
-  <ul>
-    <% @volume.issues.each do |issue| %>
-      <li><%= issue.name.present? ? issue.name : "Issue ##{issue.issue_number}" %></li>
+<div class="row">
+  <div class="col-md-3">
+    <% if @volume.image_url.present? %>
+      <%= image_tag @volume.image_url, class: "img-fluid rounded" %>
     <% end %>
-  </ul>
-<% else %>
-  <p>No issues found for this volume.</p>
-<% end %>
+  </div>
+  <div class="col-md-9">
+    <h1><%= @volume.name %></h1>
+    <p class="text-muted">
+      Publisher: <%= link_to @volume.publisher.name, publisher_path(@volume.publisher) %>
+      <% if @volume.start_year.present? %>
+        · Started: <%= @volume.start_year %>
+      <% end %>
+    </p>
 
-<%= link_to "Back to Volumes", volumes_path %>
+    <h2 class="mt-4">Issues</h2>
+    <% if @volume.issues.any? %>
+      <div class="list-group">
+        <% @volume.issues.order(:issue_number).each do |issue| %>
+          <div class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+            <% if issue.image_url.present? %>
+              <%= image_tag issue.image_url, style: "width: 50px; object-fit: contain;" %>
+            <% end %>
+            <div>
+              <%= link_to issue.name.present? ? issue.name : "Issue ##{issue.issue_number}", issue_path(issue), class: "text-decoration-none fw-bold" %>
+              <% if issue.cover_date.present? %>
+                <small class="text-muted d-block"><%= issue.cover_date.strftime("%B %Y") %></small>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-muted">No issues found for this volume.</p>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to "Back to Volumes", volumes_path, class: "btn btn-secondary mt-4" %>

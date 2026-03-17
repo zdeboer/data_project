@@ -1,9 +1,46 @@
-<h1>Welcome to Comic Vine DB</h1>
-<p>Browse a collection of comic book data pulled from the Comic Vine API.</p>
+<div class="px-4 py-5 text-center">
+  <h1 class="display-5 fw-bold">Comic Vine DB</h1>
+  <p class="col-lg-8 mx-auto lead">
+    Browse a collection of comic book data pulled from the Comic Vine API.
+    Explore publishers, volumes, issues and characters from Marvel, DC and Archie Comics.
+  </p>
+</div>
 
-<ul>
-  <li><%= link_to "Publishers", publishers_path %></li>
-  <li><%= link_to "Volumes", volumes_path %></li>
-  <li><%= link_to "Issues", issues_path %></li>
-  <li><%= link_to "Characters", characters_path %></li>
-</ul>
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-2">
+  <div class="col">
+    <div class="card h-100 text-center">
+      <div class="card-body">
+        <h3 class="card-title">Publishers</h3>
+        <p class="card-text text-muted"><%= Publisher.count %> publishers</p>
+        <%= link_to "Browse", publishers_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100 text-center">
+      <div class="card-body">
+        <h3 class="card-title">Volumes</h3>
+        <p class="card-text text-muted"><%= Volume.count %> volumes</p>
+        <%= link_to "Browse", volumes_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100 text-center">
+      <div class="card-body">
+        <h3 class="card-title">Issues</h3>
+        <p class="card-text text-muted"><%= Issue.count %> issues</p>
+        <%= link_to "Browse", issues_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100 text-center">
+      <div class="card-body">
+        <h3 class="card-title">Characters</h3>
+        <p class="card-text text-muted"><%= Character.count %> characters</p>
+        <%= link_to "Browse", characters_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

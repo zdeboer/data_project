@@ -1,30 +1,44 @@
-<h1><%= @character.name %></h1>
-
-<% if @character.image_url.present? %>
-  <%= image_tag @character.image_url, width: 200 %>
-<% end %>
-
-<% if @character.real_name.present? %>
-  <p>Real Name: <%= @character.real_name %></p>
-<% end %>
-
-<% if @character.deck.present? %>
-  <p><%= @character.deck %></p>
-<% end %>
-
-<% if @character.publisher.present? %>
-  <p>Publisher: <%= link_to @character.publisher.name, publisher_path(@character.publisher) %></p>
-<% end %>
-
-<h2>Appearances</h2>
-<% if @character.issues.any? %>
-  <ul>
-    <% @character.issues.each do |issue| %>
-      <li><%= link_to issue.name.present? ? issue.name : "Issue ##{issue.issue_number}", issue_path(issue) %></li>
+<div class="row">
+  <div class="col-md-3">
+    <% if @character.image_url.present? %>
+      <%= image_tag @character.image_url, class: "img-fluid rounded" %>
     <% end %>
-  </ul>
-<% else %>
-  <p>No issues found for this character.</p>
-<% end %>
+  </div>
+  <div class="col-md-9">
+    <h1><%= @character.name %></h1>
 
-<%= link_to "Back to Characters", characters_path %>
+    <% if @character.real_name.present? %>
+      <p class="text-muted">Real Name: <%= @character.real_name %></p>
+    <% end %>
+
+    <% if @character.deck.present? %>
+      <p><%= @character.deck %></p>
+    <% end %>
+
+    <% if @character.publisher.present? %>
+      <p>Publisher: <%= link_to @character.publisher.name, publisher_path(@character.publisher) %></p>
+    <% end %>
+
+    <h2 class="mt-4">Appearances</h2>
+    <% if @character.issues.any? %>
+      <div class="row row-cols-2 row-cols-md-4 g-3">
+        <% @character.issues.each do |issue| %>
+          <div class="col">
+            <div class="card h-100 text-center">
+              <% if issue.image_url.present? %>
+                <%= image_tag issue.image_url, class: "card-img-top", style: "object-fit: contain; height: 120px;" %>
+              <% end %>
+              <div class="card-body p-2">
+                <small><%= link_to issue.name.present? ? issue.name : "Issue ##{issue.issue_number}", issue_path(issue), class: "text-decoration-none" %></small>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-muted">No appearances found.</p>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to "Back to Characters", characters_path, class: "btn btn-secondary mt-4" %>

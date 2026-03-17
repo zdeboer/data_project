@@ -1,20 +1,33 @@
-<h1><%= @publisher.name %></h1>
-
-<% if @publisher.image_url.present? %>
-  <%= image_tag @publisher.image_url, width: 200 %>
-<% end %>
-
-<p><%= @publisher.deck %></p>
-
-<h2>Volumes</h2>
-<% if @publisher.volumes.any? %>
-  <ul>
-    <% @publisher.volumes.each do |volume| %>
-      <li><%= volume.name %></li>
+<div class="row">
+  <div class="col-md-3">
+    <% if @publisher.image_url.present? %>
+      <%= image_tag @publisher.image_url, class: "img-fluid rounded" %>
     <% end %>
-  </ul>
-<% else %>
-  <p>No volumes found for this publisher.</p>
-<% end %>
+  </div>
+  <div class="col-md-9">
+    <h1><%= @publisher.name %></h1>
+    <p class="lead"><%= @publisher.deck %></p>
 
-<%= link_to "Back to Publishers", publishers_path %>
+    <h2 class="mt-4">Volumes</h2>
+    <% if @publisher.volumes.any? %>
+      <div class="row row-cols-1 row-cols-md-3 g-3">
+        <% @publisher.volumes.each do |volume| %>
+          <div class="col">
+            <div class="card h-100">
+              <% if volume.image_url.present? %>
+                <%= image_tag volume.image_url, class: "card-img-top", style: "object-fit: contain; height: 150px;" %>
+              <% end %>
+              <div class="card-body">
+                <h6 class="card-title"><%= link_to volume.name, volume_path(volume), class: "text-decoration-none" %></h6>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-muted">No volumes found for this publisher.</p>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to "Back to Publishers", publishers_path, class: "btn btn-secondary mt-4" %>

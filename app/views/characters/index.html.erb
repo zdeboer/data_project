@@ -1,18 +1,41 @@
-<h1>Characters</h1>
+<h1 class="mb-4">Characters</h1>
 
-<% @characters.each do |character| %>
-  <div>
-    <% if character.image_url.present? %>
-      <%= image_tag character.image_url, width: 100 %>
-    <% end %>
-    <h2><%= link_to character.name, character_path(character) %></h2>
-    <% if character.real_name.present? %>
-      <p>Real Name: <%= character.real_name %></p>
-    <% end %>
-    <% if character.publisher.present? %>
-      <p>Publisher: <%= link_to character.publisher.name, publisher_path(character.publisher) %></p>
-    <% end %>
+<%= form_with url: characters_path, method: :get, class: "row g-3 mb-4" do |f| %>
+  <div class="col-auto">
+    <%= f.text_field :query, value: params[:query], placeholder: "Search characters...", class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= f.select :publisher_id,
+        options_from_collection_for_select(@publishers, :id, :name, params[:publisher_id]),
+        { include_blank: "All Publishers" },
+        { class: "form-select" } %>
+  </div>
+  <div class="col-auto">
+    <%= f.submit "Search", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<%= paginate @characters %>
+<div class="row row-cols-1 row-cols-md-4 g-4">
+  <% @characters.each do |character| %>
+    <div class="col">
+      <div class="card h-100 text-center">
+        <% if character.image_url.present? %>
+          <%= image_tag character.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
+        <% end %>
+        <div class="card-body">
+          <h6 class="card-title"><%= link_to character.name, character_path(character), class: "text-decoration-none" %></h6>
+          <% if character.real_name.present? %>
+            <p class="card-text text-muted small"><%= character.real_name %></p>
+          <% end %>
+          <% if character.publisher.present? %>
+            <p class="card-text small"><%= link_to character.publisher.name, publisher_path(character.publisher) %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <%= paginate @characters %>
+</div>
