@@ -1,4 +1,4 @@
-<h1><%= issue.name.present? ? @issue.name : "Issue ##{@issue.issue_number}" %></h1>
+<h1><%= @issue.name.present? ? @issue.name : "Issue ##{@issue.issue_number}" %></h1>
 
 <% if @issue.image_url.present? %>
   <%= image_tag @issue.image_url, width: 200 %>
