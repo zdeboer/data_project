@@ -64,3 +64,5 @@ gem "solargraph"
 gem "dotenv-rails", require: "dotenv/load", groups: [ :development, :test ]
 
 gem "faker"
+
+gem "kaminari"
