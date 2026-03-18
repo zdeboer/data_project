@@ -4,8 +4,12 @@ class CharactersController < ApplicationController
     @characters = Character.all.order(:name)
 
     if params[:query].present?
-      @characters = @characters.where("name LIKE ? OR real_name LIKE ?",
-        "%#{params[:query]}%", "%#{params[:query]}%")
+      words = params[:query].split.map { |w| "%#{w}%" }
+
+      conditions = words.map { "name LIKE ? OR real_name LIKE ?" }.join(" AND ")
+      values = words.flat_map { |w| [ w, w ] }
+
+      @characters = @characters.where(conditions, *values)
     end
 
     if params[:publisher_id].present?

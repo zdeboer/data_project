@@ -10,6 +10,7 @@
   <div class="col">
     <div class="card h-100 text-center">
       <div class="card-body">
+          <%= image_tag Publisher.find_by(name: "Marvel").image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
         <h3 class="card-title">Publishers</h3>
         <p class="card-text text-muted"><%= Publisher.count %> publishers</p>
         <%= link_to "Browse", publishers_path, class: "btn btn-primary" %>
@@ -19,6 +20,7 @@
   <div class="col">
     <div class="card h-100 text-center">
       <div class="card-body">
+        <%= image_tag Volume.first.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
         <h3 class="card-title">Volumes</h3>
         <p class="card-text text-muted"><%= Volume.count %> volumes</p>
         <%= link_to "Browse", volumes_path, class: "btn btn-primary" %>
@@ -28,6 +30,7 @@
   <div class="col">
     <div class="card h-100 text-center">
       <div class="card-body">
+        <%= image_tag Issue.first.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
         <h3 class="card-title">Issues</h3>
         <p class="card-text text-muted"><%= Issue.count %> issues</p>
         <%= link_to "Browse", issues_path, class: "btn btn-primary" %>
@@ -37,6 +40,7 @@
   <div class="col">
     <div class="card h-100 text-center">
       <div class="card-body">
+        <%= image_tag Character.first.image_url, class: "card-img-top", style: "object-fit: contain; height: 200px;" %>
         <h3 class="card-title">Characters</h3>
         <p class="card-text text-muted"><%= Character.count %> characters</p>
         <%= link_to "Browse", characters_path, class: "btn btn-primary" %>

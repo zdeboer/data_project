@@ -18,12 +18,12 @@ def comic_vine_get(resource, params = {})
   retries = 0
   begin
     response = http.request(request)
-    sleep(1.5)
+    sleep(1.1)
     data = JSON.parse(response.body)
 
     if data["status_code"] == 107
-      puts "\n  Rate limited! Waiting 60 seconds..."
-      sleep(60)
+      puts "\n  Rate limited! Waiting for it to clear..."
+      sleep(3600)
       raise JSON::ParserError
     end
 
@@ -152,7 +152,7 @@ Volume.all.each do |volume|
 
       Issue.create(
         cv_id:        i["id"],
-        name:         i["name"],
+        name:         i["name"].presence || "Issue ##{i["issue_number"]}",
         issue_number: i["issue_number"],
         cover_date:   i["cover_date"],
         image_url:    i.dig("image", "medium_url"),
@@ -172,25 +172,50 @@ puts "  #{Issue.count} issues seeded"
 # ── Characters + Character Issues ────────────────────────────
 puts "Seeding characters and character issues..."
 
-remaining = Issue.left_joins(:character_issues)
-                 .where(character_issues: { id: nil })
-                 .where.not(cv_id: nil)
-                 .count
+remaining = Issue.where(characters_seeded: [ false, nil ]).where.not(cv_id: nil).count
 
 if remaining == 0
   puts "  All issues already processed, skipping..."
 else
   puts "  #{remaining} issues still need processing..."
 
-  Issue.all.each do |issue|
-    next unless issue.cv_id
-    next if CharacterIssue.where(issue_id: issue.id).any?
+  total_issues = Issue.count
 
-    # ... rest of the loop
+  Issue.where(characters_seeded: [ false, nil ]).where.not(cv_id: nil).each do |issue|
+    result = comic_vine_get("issue/4000-#{issue.cv_id}", {})
+    results = result["results"]
+
+    if results.is_a?(Hash)
+      character_credits = results["character_credits"] || []
+
+      character_credits.each do |c|
+        next unless c.is_a?(Hash)
+        next if c["name"].blank?
+
+        character = Character.find_or_create_by(cv_id: c["id"]) do |char|
+          char.name      = c["name"]
+          char.image_url = nil
+          char.deck      = nil
+        end
+
+        next unless character.persisted?
+
+        CharacterIssue.find_or_create_by(
+          character_id: character.id,
+          issue_id:     issue.id
+        )
+      end
+
+      issue.update_column(:characters_seeded, true)
+    end
+
+    done = Issue.where(characters_seeded: true).count
+    percentage = ((done.to_f / total_issues) * 100).round(1)
+    print "\r  Progress: #{done}/#{total_issues} (#{percentage}%) — Characters: #{Character.count}, CharacterIssues: #{CharacterIssue.count}"
   end
 end
 
-puts "  #{Character.count} characters seeded"
+puts "\n  #{Character.count} characters seeded"
 puts "  #{CharacterIssue.count} character issues seeded"
 
 # ── Enrich Characters ────────────────────────────────────────
@@ -200,28 +225,34 @@ needs_enrichment = Character.where("image_url IS NULL OR real_name IS NULL OR de
 total = needs_enrichment.count
 enriched = 0
 
-needs_enrichment.each do |character|
-  next unless character.cv_id
+if total == 0
+  puts "  All characters already enriched, skipping..."
+else
+  puts "  #{total} characters need enriching..."
 
-  result = comic_vine_get("character/4005-#{character.cv_id}", {})
-  char_data = result["results"]
-  next unless char_data.is_a?(Hash)
+  needs_enrichment.each do |character|
+    next unless character.cv_id
 
-  publisher = Publisher.find_by(cv_id: char_data.dig("publisher", "id"))
+    result = comic_vine_get("character/4005-#{character.cv_id}", {})
+    char_data = result["results"]
+    next unless char_data.is_a?(Hash)
 
-  character.update(
-    real_name:    char_data["real_name"],
-    deck:         char_data["deck"],
-    image_url:    char_data.dig("image", "medium_url"),
-    publisher_id: publisher&.id
-  )
+    publisher = Publisher.find_by(cv_id: char_data.dig("publisher", "id"))
 
-  enriched += 1
-  percentage = (enriched.to_f / total * 100).round(1)
-  print "\r  Enriching: #{enriched}/#{total} (#{percentage}%)"
+    character.update(
+      real_name:    char_data["real_name"],
+      deck:         char_data["deck"],
+      image_url:    char_data.dig("image", "medium_url"),
+      publisher_id: publisher&.id
+    )
+
+    enriched += 1
+    percentage = (enriched.to_f / total * 100).round(1)
+    print "\r  Enriching: #{enriched}/#{total} (#{percentage}%)"
+  end
+
+  puts "\n  Done enriching!"
 end
-
-puts "\n  #{Character.where.not(image_url: nil).count} characters enriched!"
 
 # ── Reviews (Faker) ──────────────────────────────────────────
 puts "Seeding reviews..."

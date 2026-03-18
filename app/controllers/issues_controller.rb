@@ -4,8 +4,12 @@ class IssuesController < ApplicationController
     @issues = Issue.all.order(:cover_date)
 
     if params[:query].present?
-      @issues = @issues.where("name LIKE ? OR description LIKE ?",
-        "%#{params[:query]}%", "%#{params[:query]}%")
+      words = params[:query].split.map { |w| "%#{w}%" }
+
+      conditions = words.map { "name LIKE ? OR description LIKE ?" }.join(" AND ")
+      values = words.flat_map { |w| [ w, w ] }
+
+      @issues = @issues.where(conditions, *values)
     end
 
     if params[:volume_id].present?

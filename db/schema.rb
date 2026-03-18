@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_16_162134) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_17_183249) do
   create_table "character_issues", force: :cascade do |t|
     t.integer "character_id", null: false
     t.integer "issue_id", null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_16_162134) do
     t.integer "volume_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "characters_seeded"
     t.index ["volume_id"], name: "index_issues_on_volume_id"
   end
 

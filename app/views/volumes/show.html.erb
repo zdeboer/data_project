@@ -14,9 +14,19 @@
     </p>
 
     <h2 class="mt-4">Issues</h2>
-    <% if @volume.issues.any? %>
+
+    <%= form_with url: volume_path(@volume), method: :get, class: "row g-3 mb-3" do |f| %>
+      <div class="col-auto">
+        <%= f.text_field :query, value: params[:query], placeholder: "Search issues in this volume...", class: "form-control" %>
+      </div>
+      <div class="col-auto">
+        <%= f.submit "Search", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+
+    <% if @issues.any? %>
       <div class="list-group">
-        <% @volume.issues.order(:issue_number).each do |issue| %>
+        <% @issues.each do |issue| %>
           <div class="list-group-item list-group-item-action d-flex align-items-center gap-3">
             <% if issue.image_url.present? %>
               <%= image_tag issue.image_url, style: "width: 50px; object-fit: contain;" %>
@@ -31,7 +41,7 @@
         <% end %>
       </div>
     <% else %>
-      <p class="text-muted">No issues found for this volume.</p>
+      <p class="text-muted">No issues found.</p>
     <% end %>
   </div>
 </div>
